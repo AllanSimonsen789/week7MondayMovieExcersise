@@ -14,13 +14,13 @@ public class MovieFacade {
 
     private static MovieFacade instance;
     private static EntityManagerFactory emf;
-    
+
     //Private Constructor to ensure Singleton
-    private MovieFacade() {}
-    
-    
+    private MovieFacade() {
+    }
+
     /**
-     * 
+     *
      * @param _emf
      * @return an instance of this facade class.
      */
@@ -35,17 +35,22 @@ public class MovieFacade {
     private EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
-    
+
     //TODO Remove/Change this before use
-    public long getRenameMeCount(){
+    public long getRenameMeCount() {
         EntityManager em = emf.createEntityManager();
-        try{
-            long renameMeCount = (long)em.createQuery("SELECT COUNT(r) FROM Movie r").getSingleResult();
+        try {
+            long renameMeCount = (long) em.createQuery("SELECT COUNT(r) FROM Movie r").getSingleResult();
             return renameMeCount;
-        }finally{  
+        } finally {
             em.close();
         }
-        
+
+    }
+
+    public Movie getMovieById(int id) {
+        EntityManager em = getEntityManager();
+        return em.find(Movie.class, (long) id);
     }
 
 }

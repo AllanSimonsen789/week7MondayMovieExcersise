@@ -1,6 +1,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,6 +17,8 @@ public class Movie implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String title;
+    private int releaseYear;
     
     public Movie() {
     }
@@ -27,33 +30,68 @@ public class Movie implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public int getReleaseYear() {
+        return releaseYear;
+    }
+
+    public void setReleaseYear(int releaseYear) {
+        this.releaseYear = releaseYear;
+    }
+
+    public Movie(String title, int releaseYear) {
+        this.title = title;
+        this.releaseYear = releaseYear;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 67 * hash + Objects.hashCode(this.id);
+        hash = 67 * hash + Objects.hashCode(this.title);
+        hash = 67 * hash + this.releaseYear;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Movie other = (Movie) obj;
+        if (this.releaseYear != other.releaseYear) {
+            return false;
+        }
+        if (!Objects.equals(this.title, other.title)) {
+            return false;
+        }
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "Movie{" + "id=" + id + ", title=" + title + ", releaseYear=" + releaseYear + '}';
+    }
     
-    // TODO, delete this class, or rename to an Entity class that makes sense for what you are about to do
-    // Delete EVERYTHING below if you decide to use this class, it's dummy data used for the initial demo
-    private String dummyStr1;
-    private String dummyStr2;
-
-    public Movie(String dummyStr1, String dummyStr2) {
-        this.dummyStr1 = dummyStr1;
-        this.dummyStr2 = dummyStr2;
-    }
-
-    public String getDummyStr1() {
-        return dummyStr1;
-    }
-
-    public void setDummyStr1(String dummyStr1) {
-        this.dummyStr1 = dummyStr1;
-    }
-
-    public String getDummyStr2() {
-        return dummyStr2;
-    }
-
-    public void setDummyStr2(String dummyStr2) {
-        this.dummyStr2 = dummyStr2;
-    }
     
+   
     
     
 

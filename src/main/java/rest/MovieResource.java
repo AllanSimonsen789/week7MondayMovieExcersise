@@ -45,6 +45,12 @@ public class MovieResource {
         //System.out.println("--------------->"+count);
         return "{\"count\":"+count+"}";  //Done manually so no need for a DTO
     }
-
+    @Path("/get/{id}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getMovieWithId(@PathParam("id")int id) {
+        return GSON.toJson(FACADE.getMovieById(id));
+        
+    }
  
 }
