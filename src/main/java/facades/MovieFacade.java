@@ -28,6 +28,9 @@ public class MovieFacade {
         if (instance == null) {
             emf = _emf;
             instance = new MovieFacade();
+            instance.insertMovie("movie1",1919);
+            instance.insertMovie("movie2",1919);
+            
         }
         return instance;
     }
@@ -52,5 +55,13 @@ public class MovieFacade {
         EntityManager em = getEntityManager();
         return em.find(Movie.class, (long) id);
     }
-
+    
+    public Movie insertMovie(String title, int releaseYear){
+        EntityManager em = getEntityManager();
+        Movie m = new Movie(title, releaseYear);
+        em.getTransaction().begin();
+        em.persist(m);
+        em.getTransaction().commit();
+        return m;
+    }
 }

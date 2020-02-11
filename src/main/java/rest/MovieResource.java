@@ -52,5 +52,7 @@ public class MovieResource {
         return GSON.toJson(FACADE.getMovieById(id));
         
     }
+    
+    
  
 }
