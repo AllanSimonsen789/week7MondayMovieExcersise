@@ -60,8 +60,8 @@ public class MovieFacadeTest {
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Movie.deleteAllRows").executeUpdate();
-            em.persist(new Movie("Some txt", 1995));
-            em.persist(new Movie("aaa", 1234));
+            em.persist(new Movie("Shawshank Redemption",1994, new String[]{"Tim Robbins","Morgan Freeman"} ));
+            em.persist(new Movie("Catch me if you can",2002, new String[]{"Leonardo DiCaprio","Tom Hanks"} ));
 
             em.getTransaction().commit();
         } finally {

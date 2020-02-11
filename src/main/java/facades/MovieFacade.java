@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -28,6 +29,8 @@ public class MovieFacade {
         if (instance == null) {
             emf = _emf;
             instance = new MovieFacade();
+            instance.insertMovie("Shawshank Redemption",1994, new String[]{"Tim Robbins","Morgan Freeman"} );
+            instance.insertMovie("Catch me if you can",2002, new String[]{"Leonardo DiCaprio","Tom Hanks"} );
             
         }
         return instance;
@@ -54,12 +57,18 @@ public class MovieFacade {
         return em.find(Movie.class, (long) id);
     }
     
-    public Movie insertMovie(String title, int releaseYear){
+    public Movie insertMovie(String title, int releaseYear, String[] actors){
         EntityManager em = getEntityManager();
-        Movie m = new Movie(title, releaseYear);
+        Movie m = new Movie(title, releaseYear, actors);
         em.getTransaction().begin();
         em.persist(m);
         em.getTransaction().commit();
         return m;
+    }
+    
+    public List<Movie> getAllMovies() {
+        EntityManager em = getEntityManager();
+        TypedQuery q = em.createQuery("SELECT m FROM Movie m", Movie.class);
+        return q.getResultList();
     }
 }

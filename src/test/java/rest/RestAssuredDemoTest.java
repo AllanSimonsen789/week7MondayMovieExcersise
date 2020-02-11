@@ -21,6 +21,7 @@ public class RestAssuredDemoTest {
         RestAssured.defaultParser = Parser.JSON;
     }
 
+    @Test
     public void test_NumberOfCircuitsFor2017Season_ShouldBe20() {
         given().
                 when().

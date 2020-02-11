@@ -1,6 +1,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,6 +20,7 @@ public class Movie implements Serializable {
     private Long id;
     private String title;
     private int releaseYear;
+    private String[] actors;
     
     public Movie() {
     }
@@ -47,10 +49,21 @@ public class Movie implements Serializable {
         this.releaseYear = releaseYear;
     }
 
-    public Movie(String title, int releaseYear) {
+    public String[] getActors() {
+        return actors;
+    }
+
+    public void setActors(String[] actors) {
+        this.actors = actors;
+    }
+
+    public Movie(String title, int releaseYear, String[] actors) {
         this.title = title;
         this.releaseYear = releaseYear;
+        this.actors = actors;
     }
+
+    
 
     @Override
     public int hashCode() {
@@ -87,8 +100,10 @@ public class Movie implements Serializable {
 
     @Override
     public String toString() {
-        return "Movie{" + "id=" + id + ", title=" + title + ", releaseYear=" + releaseYear + '}';
+        return "Movie{" + "id=" + id + ", title=" + title + ", releaseYear=" + releaseYear + ", actors=" + Arrays.toString(actors) + '}';
     }
+
+    
     
     
    
