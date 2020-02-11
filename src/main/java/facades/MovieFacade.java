@@ -28,8 +28,6 @@ public class MovieFacade {
         if (instance == null) {
             emf = _emf;
             instance = new MovieFacade();
-            instance.insertMovie("movie1",1919);
-            instance.insertMovie("movie2",1919);
             
         }
         return instance;
