@@ -1,5 +1,6 @@
 package facades;
 
+import dto.MoviesDTO;
 import entities.Movie;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -29,9 +30,6 @@ public class MovieFacade {
         if (instance == null) {
             emf = _emf;
             instance = new MovieFacade();
-            instance.insertMovie("Shawshank Redemption",1994, new String[]{"Tim Robbins","Morgan Freeman"} );
-            instance.insertMovie("Catch me if you can",2002, new String[]{"Leonardo DiCaprio","Tom Hanks"} );
-            
         }
         return instance;
     }
@@ -41,7 +39,7 @@ public class MovieFacade {
     }
 
     //TODO Remove/Change this before use
-    public long getRenameMeCount() {
+    public long getMovieCount() {
         EntityManager em = emf.createEntityManager();
         try {
             long renameMeCount = (long) em.createQuery("SELECT COUNT(r) FROM Movie r").getSingleResult();
@@ -57,6 +55,13 @@ public class MovieFacade {
         return em.find(Movie.class, (long) id);
     }
     
+    public List<Movie> getMovieByName(String name) {
+        EntityManager em = getEntityManager();
+        TypedQuery q = em.createQuery("SELECT m FROM Movie m WHERE m.title = :name", Movie.class);
+        q.setParameter("name", name);
+        return q.getResultList();
+    }
+    
     public Movie insertMovie(String title, int releaseYear, String[] actors){
         EntityManager em = getEntityManager();
         Movie m = new Movie(title, releaseYear, actors);
@@ -66,9 +71,11 @@ public class MovieFacade {
         return m;
     }
     
-    public List<Movie> getAllMovies() {
+    public MoviesDTO getAllMovies() {
         EntityManager em = getEntityManager();
         TypedQuery q = em.createQuery("SELECT m FROM Movie m", Movie.class);
-        return q.getResultList();
+        return new MoviesDTO(q.getResultList());
     }
+    
+    
 }

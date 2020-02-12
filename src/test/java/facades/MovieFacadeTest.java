@@ -2,6 +2,7 @@ package facades;
 
 import utils.EMF_Creator;
 import entities.Movie;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.AfterAll;
@@ -20,6 +21,7 @@ public class MovieFacadeTest {
 
     private static EntityManagerFactory emf;
     private static MovieFacade facade;
+        private static Movie r1, r2;
 
     public MovieFacadeTest() {
     }
@@ -43,8 +45,8 @@ public class MovieFacadeTest {
      */
     @BeforeAll
     public static void setUpClassV2() {
-       emf = EMF_Creator.createEntityManagerFactory(DbSelector.TEST,Strategy.DROP_AND_CREATE);
-       facade = MovieFacade.getFacadeExample(emf);
+        emf = EMF_Creator.createEntityManagerFactory(DbSelector.TEST, Strategy.DROP_AND_CREATE);
+        facade = MovieFacade.getFacadeExample(emf);
     }
 
     @AfterAll
@@ -56,12 +58,14 @@ public class MovieFacadeTest {
     //TODO -- Make sure to change the script below to use YOUR OWN entity class
     @BeforeEach
     public void setUp() {
+        r1 = new Movie("Shawshank Redemption", 1994, new String[]{"Tim Robbins", "Morgan Freeman"});
+        r2 = new Movie("Catch me if you can", 2002, new String[]{"Leonardo DiCaprio", "Tom Hanks"});
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Movie.deleteAllRows").executeUpdate();
-            em.persist(new Movie("Shawshank Redemption",1994, new String[]{"Tim Robbins","Morgan Freeman"} ));
-            em.persist(new Movie("Catch me if you can",2002, new String[]{"Leonardo DiCaprio","Tom Hanks"} ));
+            em.persist(r1);
+            em.persist(r2);
 
             em.getTransaction().commit();
         } finally {
@@ -76,8 +80,37 @@ public class MovieFacadeTest {
 
     // TODO: Delete or change this method 
     @Test
-    public void testAFacadeMethod() {
-        assertEquals(2, facade.getRenameMeCount(), "Expects two rows in the database");
+    public void testgetMovieCountMethod() {
+        assertEquals(2, facade.getMovieCount(), "Expects two rows in the database");
     }
 
-}
+    @Test
+    public void testgetMovieByIdMethod() {
+        assertEquals("Shawshank Redemption", facade.getMovieById(Math.toIntExact(r1.getId())).getTitle(), "Expects Shawshank Redemption movie");
+    }
+
+    @Test
+    public void testgetMovieByNameMethod() {
+        List<Movie> resultList = facade.getMovieByName("Shawshank Redemption");
+        assertEquals(1, resultList.size(), "Expects size of 1");
+        assertEquals("Shawshank Redemption", resultList.get(0).getTitle(), "Expects Shawshank Redemption movie");
+
+    }
+
+    @Test
+    public void testgetAllMoviesMethod() {
+        List<Movie> resultList = facade.getAllMovies().getMovies();
+        assertEquals(2, resultList.size(), "Expects two rows in the database");
+
+    }
+    
+    @Test
+    public void testinsertMovieMethod() {
+        assertEquals(2, facade.getMovieCount(), "Expects two rows in the database");
+        facade.insertMovie("Star Wars A New Hope", 1977, new String[]{"Mark Hamill","Carrie Fisher", "Harrison Ford"});
+        assertEquals(3, facade.getMovieCount(), "Expects three rows in the database");
+
+    }
+
+
+    }
